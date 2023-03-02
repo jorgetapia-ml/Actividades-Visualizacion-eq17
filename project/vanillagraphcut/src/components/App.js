@@ -73,7 +73,7 @@ function App() {
      */
     function handleFileUploaded(ev) {
         const files = ev.target.files;
-        // FIXME: provide feedback that no files were uploaded or simply fail silently
+        // TODO: provide feedback that no files were uploaded or simply fail silently
         if (files.length === 0) { return; }
         
         toImage(files[0])
@@ -138,6 +138,28 @@ function App() {
     }
 
     function send() {
+        // TODO: provide feedback when google (IPython is not available in the global scope)
+        if (!window.google) { return; }
+
+        let image = imageCanvas.toDataURL();
+        let seedImage = seederCanvas.toDataURL();
+        // TODO: show spinner
+        window.google.colab.kernel.invokeFunction(
+            'notebook.graphCut',
+            [image, seedImage],
+            {}
+        ).then(() => {
+            console.log('successfully sent')
+        }).catch(error => {
+            // TODO: show error screen
+            console.log('whoops something went wrong')
+            console.log(error);
+        })
+        .finally(() => {
+            // TODO: hidden spinner
+            console.log('finished')
+        });
+
     }
 
     function dispose() {
@@ -146,6 +168,7 @@ function App() {
 
     return {
         run,
+        send,
         renderImage,
         dispose,
         clear
