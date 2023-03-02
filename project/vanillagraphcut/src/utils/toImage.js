@@ -3,7 +3,7 @@
  * @param {File} file 
  * @returns {Promise<Image>}
  */
-function readFile(file) {
+function toImage(file) {
     const image = new window.Image();
     image.src = window.URL.createObjectURL(file);
     return new Promise((resolve) => {
@@ -12,3 +12,5 @@ function readFile(file) {
         }
     })
 }
+
+export default toImage;

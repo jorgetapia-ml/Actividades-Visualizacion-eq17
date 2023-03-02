@@ -36,7 +36,7 @@
                             <h2 class="text-lg font-medium text-slate-900">Seed image</h2>
                         </div>
                         <div class="space-y-2">
-                            <fieldset class="space-y-2">
+                            <fieldset id="brush-selector" class="space-y-2">
                                 <label class="flex items-center gap-2">
                                     <input type="radio" name="brush" value="foreground" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
                                     <svg class="h-8 w-8 fill-slate-600" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg" >
@@ -54,7 +54,7 @@
                                     <span class="text-slate-600">Background brush</span>
                                 </label>
                             </fieldset>
-                            <button type="button" class="w-full rounded-md border border-gray-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 active:bg-gray-200">
+                            <button id="eraser" type="button" class="w-full rounded-md border border-gray-300 bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 active:bg-gray-200">
                                 Clear Seeds
                             </button>
                         </div>
@@ -101,7 +101,7 @@
                                 </p>
                             </div>
                         </div>
-                        <button class="w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <button id="graph-cut" class="w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 active:bg-indigo-700">
                             Graph Cut
                         </button>
                     </section>
@@ -109,14 +109,18 @@
             </div>
         </aside>
         <main class="flex-1">
-            <section class="flex items-center justify-center">
-                <div class="py-52">
-                    <div class="text-center">
-                        <h2 class="text-slate-900 text-2xl font-semibold tracking-wide">No image selected</h2>
-                        <p class="text-slate-600 font-light">Get started by uploading an image</p>
+            <div class="flex items-center justify-center h-full relative">
+                <section id="placeholder" class="absolute flex items-center justify-center">
+                    <div>
+                        <div class="text-center">
+                            <h2 class="text-slate-900 text-2xl font-semibold tracking-wide">No image selected</h2>
+                            <p class="text-slate-600 font-light">Get started by uploading an image</p>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+                <canvas id="image-canvas" class="absolute"></canvas>
+                <canvas id="seeder-canvas" class="absolute"></canvas>
+            </div>
         </main>
     </div>
     <script type="module" src="/main.js"></script>
