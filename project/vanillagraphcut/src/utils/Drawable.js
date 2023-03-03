@@ -24,12 +24,7 @@ function Drawable(canvas) {
     let interactive = false;
 
     /* Mouse Capturing Work */
-    canvas.addEventListener('mousemove', function(e) {
-        lastMouse.x = mouse.x;
-        lastMouse.y = mouse.y;
-        mouse.x = e.layerX;
-        mouse.y = e.layerY;
-    }, false);
+    canvas.addEventListener('mousemove', trackMouse, false);
 
     // brush properties
     ctx.lineWidth = 5;
@@ -37,13 +32,20 @@ function Drawable(canvas) {
     ctx.lineCap = 'round';
     ctx.strokeStyle = 'blue';
 
-    canvas.addEventListener('mousedown', function(e) {
+    canvas.addEventListener('mousedown', function() {
         canvas.addEventListener('mousemove', onPaint, false);
     }, false);
 
     canvas.addEventListener('mouseup', function() {
         canvas.removeEventListener('mousemove', onPaint, false);
     }, false);
+
+    function trackMouse(ev) {
+        lastMouse.x = mouse.x;
+        lastMouse.y = mouse.y;
+        mouse.x = ev.layerX;
+        mouse.y = ev.layerY;
+    }
 
     function onPaint() {
         // do not draw it is not interactive
@@ -72,9 +74,16 @@ function Drawable(canvas) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
+    function dispose() {
+        clear();
+        canvas.removeEventListener('mousemove', trackMouse, false);
+        canvas.remove();
+    }
+
     return {
         setStrokeColor,
-        clear
+        clear,
+        dispose
     }
 }
 

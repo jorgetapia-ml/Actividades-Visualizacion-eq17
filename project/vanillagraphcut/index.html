@@ -7,11 +7,11 @@
     <title>Vite App</title>
   </head>
   <body>
-    <div class="h-screen flex bg-slate-50">
+    <div class="h-screen flex bg-slate-50 relative">
         <aside class="w-96 bg-white shadow">
             <div class="px-4">
                 <div class="mt-4">
-                    <h1 class="text-2xl font-bold text-slate-900">Graph Cut</h1>
+                    <h1 class="text-2xl font-bold text-slate-900">Graph-Cut</h1>
                 </div>
                 <div class="divide-y">
                     <section class="py-4">
@@ -89,7 +89,7 @@
                                 <circle cx="35" cy="50" r="7.5"/>
                                 <circle cx="65" cy="50" r="7.5"/>
                             </svg>
-                            <h2 class="text-lg font-medium text-slate-900">Graph Cut</h2>
+                            <h2 class="text-lg font-medium text-slate-900">Graph-cut</h2>
                         </div>
                         <div class="p-2 bg-blue-50 rounded mb-4">
                             <div class="flex gap-2 items-start">
@@ -97,20 +97,20 @@
                                     <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
                                 </svg>
                                 <p class="text-blue-400">
-                                    Make sure image gets seeded before executing <b>Graph Cut</b> for better results
+                                    Make sure image gets seeded before executing <b>Segment</b> in order to get an accurate result
                                 </p>
                             </div>
                         </div>
                         <button id="graph-cut" class="w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 active:bg-indigo-700">
-                            Graph Cut
+                            Segment
                         </button>
                     </section>
                 </div>
             </div>
         </aside>
         <main class="flex-1">
-            <div class="flex items-center justify-center h-full relative">
-                <section id="placeholder" class="absolute flex items-center justify-center">
+            <div class="flex items-center justify-center h-full">
+                <section id="placeholder">
                     <div>
                         <div class="text-center">
                             <h2 class="text-slate-900 text-2xl font-semibold tracking-wide">No image selected</h2>
@@ -118,11 +118,53 @@
                         </div>
                     </div>
                 </section>
-                <canvas id="image-canvas" class="absolute"></canvas>
-                <canvas id="seeder-canvas" class="absolute"></canvas>
+
+                <div id="scribble-container" class="relative"></div>
+
+                <div id="result-container" class="hidden p-4 bg-white shadow rounded">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-center">
+                               <img id="output-original" alt="Original"/>
+                            </div>
+                            <span class="block text-center text-slate-500 font-semibold">Original</span>
+                        </div>
+                
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-center">
+                                <img id="output-segmented" alt="Segmented"/>
+                             </div>
+                            <span class="block text-center text-slate-500 font-semibold">Segmented</span>
+                        </div>
+                    </div>
+                    <div class="">
+                        <dl>
+                            <div class="py-2 grid grid-cols-3 gap-5 text-sm">
+                                <dt class="font-medium text-slate-500">Image size</dt>
+                                <dd id="output-dimension" class="text-slate-900 col-span-2 mt-0"></dd>
+                            </div>
+                            <div class="py-2 grid grid-cols-3 gap-5 text-sm">
+                                <dt class="font-medium text-slate-500">Processing time</dt>
+                                <dd id="output-processing-time" class="text-slate-900 col-span-2 mt-0"></dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
             </div>
         </main>
+        <div id="spinner" class="hidden absolute inset-0 bg-gray-900/60">
+            <div class="h-full flex items-center justify-center">
+                <div class="flex items-center">
+                    <svg class="animate-spin mr-3 h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="font-semibold text-white text-2xl">Processing...</span>
+                </div>
+            </div>
+        </div>
     </div>
+    
     <script type="module" src="/main.js"></script>
   </body>
 </html>
