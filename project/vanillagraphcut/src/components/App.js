@@ -1,6 +1,10 @@
 import toImage from '../utils/toImage';
 import Drawable from '../utils/Drawable';
 
+/**
+ * @type { foreground: string, background: string }
+ * @description map that stores a color based on a given brush
+ */
 const colorsByBrush = {
     foreground: 'rgb(255, 0, 0)',
     background: 'rgb(0, 255, 0)'
@@ -73,6 +77,10 @@ function App() {
      */
     const spinner = document.querySelector('#spinner');
 
+    /** 
+     * @returns {Function} clean-up function
+     * @description attach event listeners to input elements
+     */
     function attachListeners() {
         fileUploader.addEventListener('change', handleFileUploaded);
         eraserButton.addEventListener('click', clearScribbles);
@@ -90,6 +98,7 @@ function App() {
     /**
      * 
      * @param {Event} ev 
+     * @description converts the uploaded file as image renders it into the canvas
      */
     function handleFileUploaded(ev) {
         const files = ev.target.files;
@@ -109,29 +118,33 @@ function App() {
             });
     }
 
+    /**
+     * @param {Event} ev 
+     * @description sets the stroke color based on the selected brush 
+     */
     function handleSelectedBush(ev) {
         drawableCanvas.setStrokeColor(colorsByBrush[ev.target.value]);
     }
 
     /**
-     * removes hidden class on the given element
      * @param {HTMLElement} element 
+     * @description removes hidden class on the given element
      */
     function show(element) {
         element.classList.remove('hidden');
     }
 
     /**
-     * adds hidden class on the given element
      * @param {HTMLElement} element 
+     * @description adds hidden class on the given element
      */
     function hide(element) {
         element.classList.add('hidden');
     }
 
-    /**
-     * renders the given image into a canvas element
+     /**
      * @param {Image} image 
+     * @description renders the given image into a canvas element. this also enables canvas where users add the scribbles
      */
     function renderImage(image) {
         imageCanvas = document.createElement('canvas');
@@ -156,12 +169,18 @@ function App() {
         scribbleContainer.appendChild(scribbleCanvas);
     }
 
+    /**
+     * @description clears the scribbles rendered in the drawable canvas
+     */
     function clearScribbles() {
         if (drawableCanvas) {
             drawableCanvas.clear();
         }
     }
 
+    /**
+     * @description resets the application, by clearing generating new canva elements
+     */
     function reset() {
         if (imageCanvas) { imageCanvas.remove(); }
         if (drawableCanvas) {
@@ -172,12 +191,23 @@ function App() {
         show(scribbleContainer);
     }
 
+    /**
+     * @description run attaches all the event listeners so the app is interactive
+     */
     function run() {
         eraserButton.disabled = true;
         graphCutButton.disabled = true;
         detachListener = attachListeners();
-    }
+    }   
 
+
+    /**
+     * 
+     * @param {Image} originalImage 
+     * @param {String} segmentedImage 
+     * @param {Number} processingTime 
+     * @description populates result container element with the given data
+     */
     function populateResults(originalImage, segmentedImage, processingTime) {
         resultContainer.querySelector('#output-original').src = originalImage.src;
         resultContainer.querySelector('#output-segmented').src = segmentedImage.replace(/'/g, '');
@@ -185,6 +215,9 @@ function App() {
         resultContainer.querySelector('#output-processing-time').innerText = `${processingTime} s`;
     }
 
+     /**
+     * @description performs graphcut. two base46 images get generated (the original image and the scribbles)
+     */
     function graphcut() {
         // TODO: provide feedback when google (IPython is not available in the global scope)
         if (!window.google) { return; }
